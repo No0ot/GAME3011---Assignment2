@@ -11,7 +11,8 @@ public class LockPip : MonoBehaviour
     public float downSpeed;
     public float upSpeed;
 
-    bool canStop;
+    bool canLock;
+    bool locked;
     float lerpT = 0;
 
     public bool pickActive;
@@ -29,20 +30,36 @@ public class LockPip : MonoBehaviour
         lerpT += (downSpeed * Time.deltaTime);
         if (transform.position == endPosition)
         {
+            canLock = true;
             StartCoroutine(Stop());
         }
     }
 
     private void Update()
     {
-        if (pickActive)
+        if (!locked)
         {
-            if (!reverse)
-                Pick();
-            else
-                Reset();
+            if (pickActive)
+            {
+                if (!reverse)
+                    Pick();
+                else
+                    Reset();
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    if (canLock)
+                    {
+                        locked = true;
+                    }
+                    else
+                    {
+                        GameManager.Instance.FailPick();
+                    }
+
+                }
+            }
         }
-        
     }
 
     void Reset()
@@ -59,11 +76,23 @@ public class LockPip : MonoBehaviour
 
     IEnumerator Stop()
     {
-        yield return new WaitForSeconds(0.1f);
-        reverse = true;
-        lerpT = 0;
+        yield return new WaitForSeconds(0.55f);
+        if (!locked)
+        {
+            reverse = true;
+            lerpT = 0;
+            canLock = false;
+            upSpeed = Random.Range(0.5f, 2.0f);
+        }
         yield return null;
     }
 
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            pickActive = true;
+            downSpeed = Random.Range(3.0f, 8.0f);
+        }
+    }
 }

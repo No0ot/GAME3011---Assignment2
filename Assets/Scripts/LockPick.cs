@@ -11,21 +11,26 @@ public class LockPick : MonoBehaviour
     bool tapAnimActive;
     bool reverse;
     bool moveAnimActive;
-    float moveValue;
+    [SerializeField]
+    bool breakAnimActive;
 
+    Vector3 spawnPosition;
     Vector3 tapPosition;
     Vector3 tapPositionEnd;
+
+    Animator animator;
     // Start is called before the first frame update
     void Start()
     {
         lockpickCurrentLocationIndex = 0;
-        moveValue = 2.5f;
+        spawnPosition = transform.position;
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!tapAnimActive && !moveAnimActive)
+        if (!tapAnimActive && !moveAnimActive && !breakAnimActive)
         {
             if (Input.GetKeyDown(KeyCode.D))
             {
@@ -106,5 +111,20 @@ public class LockPick : MonoBehaviour
             reverse = false;
             tapAnimActive = false;
         }
+    }
+
+    public void BreakPick()
+    {
+        animator.SetBool("Break", true);
+        breakAnimActive = true;
+    }
+
+    public void Spawn()
+    {
+        transform.position = spawnPosition;
+        transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
+        animator.SetBool("Break", false);
+        breakAnimActive = false;
+        lockpickCurrentLocationIndex = 0;
     }
 }
