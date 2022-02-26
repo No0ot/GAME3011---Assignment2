@@ -20,7 +20,7 @@ public class LockPick : MonoBehaviour
 
     Animator animator;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         lockpickCurrentLocationIndex = 0;
         spawnPosition = transform.position;
@@ -32,31 +32,23 @@ public class LockPick : MonoBehaviour
     {
         if (!tapAnimActive && !moveAnimActive && !breakAnimActive)
         {
-            if (Input.GetKeyDown(KeyCode.D))
+            if (Input.GetKeyDown(KeyCode.A))
             {
                 if (lockpickCurrentLocationIndex < 4)
                 {
-                    moveAnimActive = true;
-                    lerpT = 0;
-                    lockpickCurrentLocationIndex++;
-                    tapPosition = transform.position;
-                    tapPositionEnd = new Vector3(tapPosition.x, tapPosition.y, tapPosition.z - 2.5f);
+                    Move(-2.5f);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.D))
             {
                 if (lockpickCurrentLocationIndex > 0)
                 {
-                    moveAnimActive = true;
-                    lerpT = 0;
-                    lockpickCurrentLocationIndex--;
-                    tapPosition = transform.position;
-                    tapPositionEnd = new Vector3(tapPosition.x , tapPosition.y, tapPosition.z + 2.5f);
+                    Move(2.5f);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.S))
             {
                 tapAnimActive = true;
                 tapPosition = transform.position;
@@ -67,7 +59,7 @@ public class LockPick : MonoBehaviour
 
         if(moveAnimActive)
         {
-            Move();
+            MoveLockpickIn();
         }
 
         if (tapAnimActive)
@@ -75,11 +67,25 @@ public class LockPick : MonoBehaviour
             if (!reverse)
                 Tap();
             else
-                Reset();
+                ReturnToStartPosition();
         }
     }
 
-    public void Move()
+    public void Move(float distance)
+    {
+        moveAnimActive = true;
+        lerpT = 0;
+
+        if(distance < 0)
+            lockpickCurrentLocationIndex++;
+        else
+            lockpickCurrentLocationIndex--;
+
+        tapPosition = transform.position;
+        tapPositionEnd = new Vector3(tapPosition.x, tapPosition.y, tapPosition.z + distance);
+    }
+
+    public void MoveLockpickIn()
     {
         transform.position = Vector3.Lerp(tapPosition, tapPositionEnd, lerpT);
         lerpT += (2 * Time.deltaTime);
@@ -101,7 +107,7 @@ public class LockPick : MonoBehaviour
         }
     }
 
-    private void Reset()
+    private void ReturnToStartPosition()
     {
         transform.position = Vector3.Lerp(tapPositionEnd, tapPosition, lerpT);
         lerpT += (2 * Time.deltaTime);
@@ -115,8 +121,11 @@ public class LockPick : MonoBehaviour
 
     public void BreakPick()
     {
-        animator.SetBool("Break", true);
-        breakAnimActive = true;
+        if (!breakAnimActive)
+        {
+            animator.SetBool("Break", true);
+            breakAnimActive = true;
+        }
     }
 
     public void Spawn()

@@ -4,19 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int numLockedPips;
-    [SerializeField]
-    int numLockPicks;
-
-    public int lockDifficulty;
-    [Range(0.1f, 0.9f)]
-    public int lockpickingSkill;
-
-    public LockPick theLockpick;
 
     public static GameManager Instance;
 
-    private void Awake()
+    [SerializeField]
+    GameObject lockPickingMiniGame;
+    [SerializeField]
+    GameObject mainGame;
+    // Start is called before the first frame update
+    void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -26,14 +22,20 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    public void FailPick()
+    public void StartLockpickingMinigame(DoorScript door)
     {
-        theLockpick.BreakPick();
-        numLockPicks--;
-        if(numLockPicks <= 0)
-        {
-            //LOSE GAME
-            Debug.Log("LOSER");
-        }
+        lockPickingMiniGame.SetActive(true);
+        lockPickingMiniGame.GetComponent<LockpickingMiniGameManager>().door = door;
+        mainGame.SetActive(false);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
+
+    public void LeaveLockpickingMinigame()
+    {
+        lockPickingMiniGame.SetActive(false);
+        mainGame.SetActive(true);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
 }

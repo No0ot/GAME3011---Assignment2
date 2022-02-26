@@ -1092,7 +1092,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   end: {fileID: 786015339}
-  downSpeed: 5
+  downSpeedMin: 3
+  downSpeedMax: 8
+  upSpeedMin: 0.5
+  upSpeedMax: 4
+  lockWindow: 0
   upSpeed: 0.5
   pickActive: 0
   reverse: 0
