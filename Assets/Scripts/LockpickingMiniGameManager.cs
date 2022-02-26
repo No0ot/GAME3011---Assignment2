@@ -21,11 +21,12 @@ public class LockpickingMiniGameManager : MonoBehaviour
     LockPip[] lockPips;
 
     public TMP_Text timerText;
+    public TMP_Text difficultyText;
 
     public DoorScript door;
 
     float time;
-    float timeStart = 25.0f;
+    float timeStart = 20.0f;
 
     private void Awake()
     {
@@ -52,9 +53,11 @@ public class LockpickingMiniGameManager : MonoBehaviour
         }
         else
         {
-            time = 0;
+            time = 0f;
             StartCoroutine(Fail());
         }
+
+        difficultyText.text = "Difficulty: " + lockDifficulty;
     }
 
     private void OnDisable()

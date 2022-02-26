@@ -118,8 +118,8 @@ public class LockPip : MonoBehaviour
         lerpT = 0;
         transform.position = startPosition;
 
-        downSpeedMin = 5.0f  + (-(LockpickingMiniGameManager.Instance.lockpickingSkill / 50) + (LockpickingMiniGameManager.Instance.lockDifficulty / 5));
-        downSpeedMax = 10.0f + (-(LockpickingMiniGameManager.Instance.lockpickingSkill / 25) + LockpickingMiniGameManager.Instance.lockDifficulty / 5);
+        downSpeedMin = 4.0f  + (-(LockpickingMiniGameManager.Instance.lockpickingSkill / 50) + (LockpickingMiniGameManager.Instance.lockDifficulty / 5));
+        downSpeedMax = 12.0f + (-(LockpickingMiniGameManager.Instance.lockpickingSkill / 25) + LockpickingMiniGameManager.Instance.lockDifficulty / 5);
         upSpeedMin = 1.5f - (LockpickingMiniGameManager.Instance.lockpickingSkill / 100);
         upSpeedMax = 3.0f - (LockpickingMiniGameManager.Instance.lockpickingSkill / 100);
 
